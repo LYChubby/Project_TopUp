@@ -32,21 +32,18 @@ app.use("/", userAkun);
 app.get("/", (req, res) => {
   res.render("index", {
     layout: "layouts/main-layout",
-    showNavFootbar: true
   });
 });
 
 app.get("/CekTransaksi", (req, res) => {
   res.render("cekTransaksi", {
     layout: "layouts/main-layout",
-    showNavFootbar: true
   });
 });
 
 app.get("/leaderboard", (req, res) => {
   res.render("leaderboard", {
     layout: "layouts/main-layout",
-    showNavFootbar: true
   });
 });
 
