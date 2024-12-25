@@ -1,0 +1,15 @@
+.border-top {
+  margin-bottom: 20px;
+}
+
+main {
+  flex-grow: 1; /* Elemen utama mengambil sisa ruang vertikal */
+}
+
+.text {
+  color: #d1a875;
+}
+
+.text-secondary:hover {
+  color: white;
+}

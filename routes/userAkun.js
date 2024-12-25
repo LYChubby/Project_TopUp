@@ -6,15 +6,13 @@ const router = express.Router();
 // Route untuk menampilkan form signup
 router.get("/signup", (req, res) => {
   res.render("signup", {
-    layout: 'layouts/main-layout',
-    showNavFootbar: false
+    layout: "layouts/loginpage",
   });
 });
 
 router.get("/login", (req, res) => {
   res.render("login", {
-    layout: 'layouts/main-layout',
-    shownashowNavFootbar: false
+    layout: "layouts/loginpage",
   });
 });
 

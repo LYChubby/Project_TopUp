@@ -1,3 +1,21 @@
+body {
+  background-color: #212529;
+}
+
 .small {
-  color: black;
+  color: white;
+}
+
+.bahasa {
+  background-color: #d1a875; /* Warna tombol */
+  color: #000; /* Warna teks tombol */
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: bold;
 }
