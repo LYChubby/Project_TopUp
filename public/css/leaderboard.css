@@ -1,0 +1,19 @@
+.cekLeaderboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-content: center;
+  align-items: center;
+  margin-top: 70px;
+  color: white;
+}
+
+.cekLeaderboard h2 {
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #d1a875;
+}
+
+.cekLeaderboard p {
+  font-size: 18px;
+}
