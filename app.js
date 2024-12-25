@@ -35,6 +35,18 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/CekTransaksi", (req, res) => {
+  res.render("cekTransaki", {
+    layout: "layouts/main-layout",
+  });
+});
+
+app.get("/leaderboard", (req, res) => {
+  res.render("leaderboard", {
+    layout: "layouts/main-layout",
+  });
+});
+
 app.use((req, res) => {
   res.status(404).send("Page Not Found");
 });
