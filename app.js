@@ -36,7 +36,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/CekTransaksi", (req, res) => {
-  res.render("cekTransaki", {
+  res.render("cekTransaksi", {
     layout: "layouts/main-layout",
   });
 });
