@@ -6,6 +6,7 @@
   padding: 100px;
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   height: 50vh;
   width: 95%;
   background-color: rgb(44, 51, 59);
@@ -93,4 +94,32 @@ input[type="text"]:focus {
 
 #cari:hover {
   background-color: #c29564;
+}
+
+@media (max-width: 768px) {
+  .cekTransaksi {
+    padding: 50px;
+    height: 60vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .cekTransaksi {
+    padding: 20px;
+    height: 70vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .cardTransaksi {
+    width: 90%;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cardTransaksi {
+    width: 95%;
+    padding: 15px;
+  }
 }

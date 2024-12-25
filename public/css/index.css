@@ -1,0 +1,25 @@
+.carousel-container {
+  padding-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#carouselExampleFade {
+  width: 75%;
+  margin: auto;
+}
+
+.carousel-inner img {
+  display: block;
+  width: 1000px;
+  height: auto;
+  border-radius: 20px;
+  margin: auto;
+}
+
+@media (max-width: 1024px) {
+  .carousel-inner img {
+    width: 100%;
+  }
+}
