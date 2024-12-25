@@ -7,11 +7,11 @@ const port = process.env.PORT;
 const db = require("./database/db");
 const expressLayouts = require("express-ejs-layouts");
 const session = require("express-session");
-// const authRoutes = require("./routes/authRoutes");
+const userAkun = require("./routes/userAkun");
 
 app.use(expressLayouts);
 app.use(express.json());
-app.use(express.static('public'))
+app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 app.use(express.static(path.join(__dirname, "public")));
@@ -26,6 +26,8 @@ app.use(
     cookie: { secure: false }, // Set ke true jika menggunakan HTTPS
   })
 );
+
+app.use("/", userAkun);
 
 app.get("/", (req, res) => {
   res.render("index", {
