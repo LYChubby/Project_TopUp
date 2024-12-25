@@ -1,0 +1,95 @@
+.cekTransaksi {
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  color: white;
+  padding: 100px;
+  display: flex;
+  flex-direction: column;
+  height: 50vh;
+  width: 95%;
+  background-color: rgb(44, 51, 59);
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+}
+
+.transaksi {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.transaksi h1 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.transaksi p {
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+
+.cardTransaksi {
+  width: 80%;
+  margin-top: 40px;
+  padding: 35px;
+  max-width: 600px;
+  text-align: left;
+  color: white;
+  background-color: #2f2e2e;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.cardTransaksi label {
+  font-size: 16px;
+  color: #ccc;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.isiTransaksi {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 10px 15px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+input[type="text"]:focus {
+  border-color: #8c8c8c;
+}
+
+#cari {
+  background-color: #d1a875; /* Warna tombol */
+  color: #000; /* Warna teks tombol */
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: bold;
+}
+
+#cari:hover {
+  background-color: #c29564;
+}
