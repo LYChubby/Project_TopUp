@@ -35,6 +35,12 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/mobile-legend", (req, res) => {
+  res.render("mobile-legend", {
+    layout: "layouts/main-layout",
+  });
+});
+
 app.get("/CekTransaksi", (req, res) => {
   res.render("cekTransaksi", {
     layout: "layouts/main-layout",
