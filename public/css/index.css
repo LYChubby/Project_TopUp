@@ -18,6 +18,29 @@
   margin: auto;
 }
 
+.sect-2 {
+  max-width: 1200px;
+  margin: 50px auto;
+}
+
+.sect-2 h2,
+p {
+  color: white;
+}
+
+.sect-2 p {
+  margin-bottom: 20px;
+}
+
+.popular {
+  background-color: rgb(56, 55, 55);
+  border: 1px solid #d1a875;
+}
+
+.popular:hover {
+  transform: scale(1.05);
+}
+
 .daftarGame {
   max-width: 1200px;
   margin: 80px auto;
