@@ -47,6 +47,12 @@ app.get("/valorant", (req, res) => {
   });
 });
 
+app.get("/honor-of-kings", (req, res) => {
+  res.render("honor-king", {
+    layout: "layouts/main-layout",
+  });
+});
+
 app.get("/CekTransaksi", (req, res) => {
   res.render("cekTransaksi", {
     layout: "layouts/main-layout",
