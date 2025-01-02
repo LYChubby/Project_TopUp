@@ -42,7 +42,7 @@
           <div class="form-section-container-main">
             <div class="form-section">
               <div class="form-section-card">
-                <div class="card-container">
+                <div class="card-container" onclick="updatePayBill(55597)">
                   <div class="card-item">
                     <div class="points">475 VP</div>
                     <div class="items-price">Rp 55.597</div>
@@ -51,7 +51,7 @@
                     <img class="logo-items" src="/images/logovp.png" alt="" />
                   </div>
                 </div>
-                <div class="card-container">
+                <div class="card-container" onclick="updatePayBill(111194)">
                   <div class="card-item">
                     <div class="points">1000 VP</div>
                     <div class="items-price">Rp 111.194</div>
@@ -60,7 +60,7 @@
                     <img class="logo-items" src="/images/logovp.png" alt="" />
                   </div>
                 </div>
-                <div class="card-container">
+                <div class="card-container" onclick="updatePayBill(222385)">
                   <div class="card-item">
                     <div class="points">2050 VP</div>
                     <div class="items-price">Rp 222.385</div>
@@ -69,7 +69,7 @@
                     <img class="logo-items" src="/images/logovp.png" alt="" />
                   </div>
                 </div>
-                <div class="card-container">
+                <div class="card-container" onclick="updatePayBill(386195)">
                   <div class="card-item">
                     <div class="points">3650 VP</div>
                     <div class="items-price">Rp 386.195</div>
@@ -78,7 +78,7 @@
                     <img class="logo-items" src="/images/logovp.png" alt="" />
                   </div>
                 </div>
-                <div class="card-container">
+                <div class="card-container" onclick="updatePayBill(554968)">
                   <div class="card-item">
                     <div class="points">5350 VP</div>
                     <div class="items-price">Rp 554.968</div>
@@ -87,7 +87,7 @@
                     <img class="logo-items" src="/images/logovp.png" alt="" />
                   </div>
                 </div>
-                <div class="card-container">
+                <div class="card-container" onclick="updatePayBill(1091072)">
                   <div class="card-item">
                     <div class="points">11000 VP</div>
                     <div class="items-price">Rp 1.091.072</div>
@@ -111,37 +111,37 @@
                 <div class="card-container">
                   <div class="card-items">
                     <img class="logo-items-pay" src="/images/gopaylogo.png" alt="" />
-                    <div class="pay-bill">Rp 1.091.072</div>
+                    <div class="pay-bill" id="pay-bill">Rp 0</div>
                   </div>
                 </div>
                 <div class="card-container">
                   <div class="card-items">
                     <img class="logo-items-pay" src="/images/shopeepaylogo.png" alt="" />
-                    <div class="pay-bill">Rp 1.091.072</div>
+                    <div class="pay-bill" id="pay-bill">Rp 0</div>
                   </div>
                 </div>
                 <div class="card-container">
                   <div class="card-items">
                     <img class="logo-items-pay" src="/images/danalogo.png" alt="" />
-                    <div class="pay-bill">Rp 1.091.072</div>
+                    <div class="pay-bill" id="pay-bill">Rp 0</div>
                   </div>
                 </div>
                 <div class="card-container">
                   <div class="card-items">
                     <img class="logo-items-pay" src="/images/danalogo.png" alt="" />
-                    <div class="pay-bill">Rp 1.091.072</div>
+                    <div class="pay-bill" id="pay-bill">Rp 0</div>
                   </div>
                 </div>
                 <div class="card-container">
                   <div class="card-items">
                     <img class="logo-items-pay" src="/images/danalogo.png" alt="" />
-                    <div class="pay-bill">Rp 1.091.072</div>
+                    <div class="pay-bill" id="pay-bill">Rp 0</div>
                   </div>
                 </div>
                 <div class="card-container">
                   <div class="card-items">
                     <img class="logo-items-pay" src="/images/danalogo.png" alt="" />
-                    <div class="pay-bill">Rp 1.091.072</div>
+                    <div class="pay-bill" id="pay-bill">Rp 0</div>
                   </div>
                 </div>
               </div>
@@ -164,3 +164,23 @@
     </section>
   </div>
 </main>
+
+<script>
+  function updatePayBill(amount) {
+    const formatCurrency = (number) => {
+      return "Rp " + number.toLocaleString("id-ID");
+    };
+
+    const payBills = document.querySelectorAll("#pay-bill");
+    payBills.forEach((payBill) => {
+      payBill.textContent = formatCurrency(amount);
+    });
+  }
+
+  document.querySelectorAll(".card-container .card-item").forEach((card, index) => {
+    card.addEventListener("click", () => {
+      const prices = [55597, 111194, 222385];
+      updatePayBill(prices[index]);
+    });
+  });
+</script>
