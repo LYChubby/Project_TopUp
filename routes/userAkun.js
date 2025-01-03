@@ -3,10 +3,41 @@ const bcrypt = require("bcryptjs");
 const db = require("../database/db");
 const router = express.Router();
 
+router.post("/signup", (req, res) => {
+  const { username, password } = req.body;
+
+  bcrypt.hash(password, 10, (err, hash) => {
+    if (err) return res.status(500).json({ success: false, message: "Error hashing password" });
+
+    db.query("INSERT INTO users (username, password) VALUES (?, ?)", [username, hash], (err, result) => {
+      if (err) return res.status(500).json({ success: false, message: "Error registering user" });
+      res.redirect("/login");
+    });
+  });
+});
+
 // Route untuk menampilkan form signup
 router.get("/signup", (req, res) => {
   res.render("signup", {
     layout: "layouts/loginpage",
+  });
+});
+
+router.post("/login", (req, res) => {
+  const { username, password } = req.body;
+
+  db.query("SELECT * FROM users WHERE username = ?", [username], (err, results) => {
+    if (err) return res.status(500).json({ success: false, message: "Error fetching user" });
+    if (results.length === 0) return res.status(400).json({ success: false, message: "User not found" });
+
+    bcrypt.compare(password, results[0].password, (err, isMatch) => {
+      if (err) return res.status(500).json({ success: false, message: "Error checking password" });
+      if (!isMatch) return res.status(401).json({ success: false, message: "Incorrect password" });
+
+      // Simpan userId dalam sesi setelah login berhasil
+      req.session.userId = results[0].id;
+      res.redirect("/"); // Arahkan ke halaman utama setelah login
+    });
   });
 });
 
