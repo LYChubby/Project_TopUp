@@ -11,7 +11,7 @@ router.post("/signup", (req, res) => {
 
     db.query("INSERT INTO users (username, password) VALUES (?, ?)", [username, hash], (err, result) => {
       if (err) return res.status(500).json({ success: false, message: "Error registering user" });
-      res.redirect("/login");
+      res.json({ success: true, message: "User registered successfully" });
     });
   });
 });
@@ -36,7 +36,7 @@ router.post("/login", (req, res) => {
 
       // Simpan userId dalam sesi setelah login berhasil
       req.session.userId = results[0].id;
-      res.redirect("/"); // Arahkan ke halaman utama setelah login
+      res.json({ success: true, message: "Login successful" }); // Arahkan ke halaman utama setelah login
     });
   });
 });

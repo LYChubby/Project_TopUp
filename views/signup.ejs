@@ -32,7 +32,7 @@
 
       const result = await response.json();
 
-      if (result.success) {
+      if (response.ok && result.success) {
         Swal.fire({
           title: "Akun Berhasil Dibuat",
           icon: "success",
