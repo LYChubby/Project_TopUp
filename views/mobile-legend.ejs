@@ -32,8 +32,8 @@
               <input class="form-section-input" id="game-id" type="text" placeholder="Masukkan ID Game" autocomplete="off" style="width: 100%" />
             </div>
             <div class="form-section">
-              <label for="game-id">Server</label>
-              <input class="form-section-input" id="game-id" type="text" placeholder="Masukkan ID Game" autocomplete="off" style="width: 100%" />
+              <label for="game-server">Server</label>
+              <input class="form-section-input" id="game-server" type="text" placeholder="Masukkan Server Game" autocomplete="off" style="width: 100%" />
             </div>
           </div>
           <p>Untuk menemukan ID & Server akun Anda, klik avatar Anda di pojok kiri atas layar dan buka tab Info Umum. Contoh: 12345678 (9864), maka ID adalah 12345678 dan Server adalah 9864</p>
@@ -42,130 +42,65 @@
           <div class="form-section-container-topbar">
             <p class="step-number">2</p>
             <h2 class="title-bar">Pilih Nominal TopUp</h2>
+            <button type="button" class="btn btn-primary ms-auto me-3" style="margin-left: auto" data-bs-toggle="modal" data-bs-target="#itemModal" onclick="openAddModal()">Tambah Data</button>
           </div>
           <div class="form-section-container-main">
             <p>Special Items</p>
-            <div class="form-section">
-              <div class="form-section-card">
-                <div class="card-container" onclick="updatePayBill(28510)">
-                  <div class="card-item">
-                    <div class="points">Weekly Diamond Pass</div>
-                    <div class="items-price">Rp 28.510</div>
-                  </div>
-                  <div class="logo-container">
-                    <img class="logo-items" src="/images/twilight.jpg" alt="" />
-                  </div>
-                </div>
-                <div class="card-container" onclick="updatePayBill(57020)">
-                  <div class="card-item">
-                    <div class="points">2x Weekly Diamond Pass</div>
-                    <div class="items-price">Rp 57.020</div>
-                  </div>
-                  <div class="logo-container">
-                    <img class="logo-items" src="/images/twilight.jpg" alt="" />
-                  </div>
-                </div>
-                <div class="card-container" onclick="updatePayBill(85529)">
-                  <div class="card-item">
-                    <div class="points">3x Weekly Diamond Pass</div>
-                    <div class="items-price">Rp 85.529</div>
-                  </div>
-                  <div class="logo-container">
-                    <img class="logo-items" src="/images/twilight.jpg" alt="" />
-                  </div>
-                </div>
-                <div class="card-container" onclick="updatePayBill(114039)">
-                  <div class="card-item">
-                    <div class="points">4x Weekly Diamond Pass</div>
-                    <div class="items-price">Rp 114.039</div>
-                  </div>
-                  <div class="logo-container">
-                    <img class="logo-items" src="/images/twilight.jpg" alt="" />
-                  </div>
-                </div>
-                <div class="card-container" onclick="updatePayBill(142549)">
-                  <div class="card-item">
-                    <div class="points">5x Weekly Diamond Pass</div>
-                    <div class="items-price">Rp 142.549</div>
-                  </div>
-                  <div class="logo-container">
-                    <img class="logo-items" src="/images/twilight.jpg" alt="" />
-                  </div>
-                </div>
-                <div class="card-container" onclick="updatePayBill(153547)">
-                  <div class="card-item">
-                    <div class="points">Twilight Pass</div>
-                    <div class="items-price">Rp 153.547</div>
-                  </div>
-                  <div class="logo-container">
-                    <img class="logo-items" src="/images/twilight.jpg" alt="" />
-                  </div>
-                </div>
-              </div>
+            <div class="form-section-card" id="specialItemsContainer">
+              <!-- Special Items Cards will be dynamically rendered here -->
             </div>
           </div>
           <div class="form-section-container-main">
             <p>Top Up Instant</p>
-            <div class="form-section">
-              <div class="form-section-card">
-                <div class="card-container" onclick="updatePayBill(1539)">
-                  <div class="card-item">
-                    <div class="points">5 (5+0) Diamonds</div>
-                    <div class="items-price">Rp 1.539</div>
-                  </div>
-                  <div class="logo-container">
-                    <img class="logo-items" src="/images/diamond.jpg" alt="" />
-                  </div>
+            <div class="form-section-card" id="instantTopUpContainer">
+              <!-- Instant Top-Up Cards will be dynamically rendered here -->
+            </div>
+          </div>
+
+          <!-- Add/Edit Modal -->
+          <div id="itemModal" class="modal fade" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="itemModalLabel">Tambah Item Baru</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="card-container" onclick="updatePayBill(3120)">
-                  <div class="card-item">
-                    <div class="points">10 (9+1) Diamonds</div>
-                    <div class="items-price">Rp 3.120</div>
-                  </div>
-                  <div class="logo-container">
-                    <img class="logo-items" src="/images/diamond.jpg" alt="" />
-                  </div>
-                </div>
-                <div class="card-container" onclick="updatePayBill(3590)">
-                  <div class="card-item">
-                    <div class="points">12 (11+1) Diamonds</div>
-                    <div class="items-price">Rp 3.590</div>
-                  </div>
-                  <div class="logo-container">
-                    <img class="logo-items" src="/images/diamond.jpg" alt="" />
-                  </div>
-                </div>
-                <div class="card-container" onclick="updatePayBill(4159)">
-                  <div class="card-item">
-                    <div class="points">14 (13+1) Diamonds</div>
-                    <div class="items-price">Rp 4.159</div>
-                  </div>
-                  <div class="logo-container">
-                    <img class="logo-items" src="/images/diamond.jpg" alt="" />
-                  </div>
-                </div>
-                <div class="card-container" onclick="updatePayBill(4617)">
-                  <div class="card-item">
-                    <div class="points">15 (15+0) Diamonds</div>
-                    <div class="items-price">Rp 4.617</div>
-                  </div>
-                  <div class="logo-container">
-                    <img class="logo-items" src="/images/diamond.jpg" alt="" />
-                  </div>
-                </div>
-                <div class="card-container" onclick="updatePayBill(5128)">
-                  <div class="card-item">
-                    <div class="points">17 (16+1) Diamonds</div>
-                    <div class="items-price">Rp 5.128</div>
-                  </div>
-                  <div class="logo-container">
-                    <img class="logo-items" src="/images/diamond.jpg" alt="" />
-                  </div>
+                <div class="modal-body">
+                  <form id="itemForm">
+                    <!-- Input untuk Nama Item -->
+                    <div class="mb-3">
+                      <label for="itemName" class="form-label">Nama Item</label>
+                      <input type="text" id="itemName" name="itemName" class="form-control" required />
+                    </div>
+                    <!-- Input untuk Harga -->
+                    <div class="mb-3">
+                      <label for="itemPrice" class="form-label">Harga</label>
+                      <input type="number" id="itemPrice" name="itemPrice" class="form-control" required />
+                    </div>
+                    <!-- Input untuk Tipe Item -->
+                    <div class="mb-3">
+                      <label for="itemType" class="form-label">Tipe Item</label>
+                      <select id="itemType" name="itemType" class="form-select" required>
+                        <option value="special">Special Items</option>
+                        <option value="instant">Top-Up Instant</option>
+                      </select>
+                    </div>
+                    <!-- Input untuk URL Gambar -->
+                    <div class="mb-3">
+                      <label for="itemImage" class="form-label">URL Gambar</label>
+                      <input type="text" id="itemImage" name="itemImage" class="form-control" required />
+                    </div>
+                    <!-- Hidden Input untuk ID (Hanya digunakan saat edit) -->
+                    <input type="hidden" id="itemId" name="itemId" />
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary mt-3">Simpan</button>
+                  </form>
                 </div>
               </div>
             </div>
           </div>
         </section>
+
         <section class="form-section-container">
           <div class="form-section-container-topbar">
             <p class="step-number">3</p>
@@ -248,5 +183,179 @@
       const prices = [28510, 57020, 85529];
       updatePayBill(prices[index]);
     });
+  });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+  let items = [];
+
+  // Function to render items
+  function renderItems() {
+    const specialItemsContainer = $("#specialItemsContainer");
+    const instantTopUpContainer = $("#instantTopUpContainer");
+
+    specialItemsContainer.empty();
+    instantTopUpContainer.empty();
+
+    items.forEach((item) => {
+      const card = `
+        <div class="card-container" id="item-${item.id}">
+          <div class="card-item">
+            <div class="product-detail-name">${item.name}</div>
+            <div class="items-price">Rp ${item.price}</div>
+          </div>
+          <div class="logo-container">
+            <img class="logo-items" src="${item.image_url}" alt="Item Image" />
+          </div>
+          <div class="d-flex justify-content-between mt-2">
+            <button class="btn btn-sm btn-success" onclick="editItem(${item.id})">Edit</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteItem(${item.id})">Delete</button>
+          </div>
+        </div>
+      `;
+      if (item.type === "special") {
+        specialItemsContainer.append(card);
+      } else {
+        instantTopUpContainer.append(card);
+      }
+    });
+  }
+
+  // Function to open modal for adding new item
+  function openAddModal() {
+    $("#itemId").val("");
+    $("#itemName").val("");
+    $("#itemPrice").val("");
+    $("#itemType").val("special");
+    $("#itemImage").val("");
+    $("#itemModalLabel").text("Tambah Item Baru");
+    $("#itemModal").modal("show");
+  }
+
+  // Function to add new item
+  function addItem(item) {
+    console.log("Adding item:", item); // Debugging step
+    $.ajax({
+      url: "http://localhost:2526/api/mobile-legend", // Your backend API endpoint
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify(item),
+      success: function (newItem) {
+        items.push(newItem);
+        renderItems();
+        console.log("Item added:", newItem); // Debugging step
+      },
+      error: function (error) {
+        console.error("Error adding item:", error);
+        alert("Gagal menambahkan item.");
+      },
+    });
+  }
+
+  function updateItem(item) {
+    console.log("Updating item:", item); // Debugging step
+    $.ajax({
+      url: `http://localhost:2526/api/mobile-legend/${item.id}`,
+      method: "PUT",
+      contentType: "application/json",
+      data: JSON.stringify(item),
+      success: function () {
+        const index = items.findIndex((i) => i.id === item.id);
+        if (index !== -1) {
+          items[index] = item;
+          renderItems();
+          console.log("Item updated:", item); // Debugging step
+        }
+      },
+      error: function (error) {
+        console.error("Error updating item:", error);
+        alert("Gagal memperbarui item.");
+      },
+    });
+  }
+
+  // Function to delete item
+  function deleteItem(id) {
+    $.ajax({
+      url: `http://localhost:2526/api/mobile-legend/${id}`,
+      method: "DELETE",
+      success: function () {
+        items = items.filter((item) => item.id !== id);
+        renderItems();
+      },
+      error: function () {
+        alert("Gagal menghapus item.");
+      },
+    });
+  }
+
+  // Function to populate form for editing item
+  function editItem(id) {
+    const item = items.find((i) => i.id === id);
+    if (item) {
+      $("#itemId").val(item.id);
+      $("#itemName").val(item.name);
+      $("#itemPrice").val(item.price);
+      $("#itemType").val(item.type);
+      $("#itemImage").val(item.image_url);
+      $("#itemModalLabel").text("Edit Item");
+      $("#itemModal").modal("show");
+    }
+  }
+
+  // Handle form submission
+  $(document).ready(function () {
+    // Bind form submit event after DOM is ready
+    $("#itemForm").on("submit", function (e) {
+      e.preventDefault();
+      console.log("Form submitted");
+
+      const id = Number($("#itemId").val());
+      const name = $("#itemName").val();
+      const price = Number($("#itemPrice").val());
+      const type = $("#itemType").val();
+      const image_url = $("#itemImage").val();
+
+      if (!name || !price || !type || !image_url) {
+        console.error("Data tidak lengkap!");
+        alert("Pastikan semua kolom terisi!");
+        return;
+      }
+
+      const item = { id, name, price, type, image_url };
+
+      if (id) {
+        console.log("Updating item", item);
+        updateItem(item);
+      } else {
+        console.log("Adding item", item);
+        addItem(item);
+      }
+
+      $("#itemModal").modal("hide");
+      $("#itemForm")[0].reset();
+    });
+  });
+
+  // Fetch items from the backend
+  function fetchItems() {
+    $.ajax({
+      url: "http://localhost:2526/api/mobile-legend", // Your backend API endpoint
+      method: "GET",
+      success: function (data) {
+        items = data;
+        renderItems();
+      },
+      error: function () {
+        alert("Gagal memuat data.");
+      },
+    });
+  }
+
+  $(document).ready(function () {
+    fetchItems(); // Fetch items when page loads
   });
 </script>

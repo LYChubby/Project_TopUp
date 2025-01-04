@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const app = express();
+const bodyParser = require("body-parser");
 // const todoRoutes = require("./routes/tododb.js");
 require("dotenv").config();
 const port = process.env.PORT;
@@ -8,9 +9,11 @@ const db = require("./database/db");
 const expressLayouts = require("express-ejs-layouts");
 const session = require("express-session");
 const userAkun = require("./routes/userAkun");
+const mobileLegendDb = require("./routes/mobileLegenddb");
 
 app.use(expressLayouts);
 app.use(express.json());
+app.use(bodyParser.json());
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
@@ -28,6 +31,7 @@ app.use(
 );
 
 app.use("/", userAkun);
+app.use("/api/mobile-legend", mobileLegendDb);
 
 app.get("/", (req, res) => {
   res.render("index", {
