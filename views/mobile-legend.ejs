@@ -205,7 +205,7 @@
         <div class="card-container" id="item-${item.id}">
           <div class="card-item">
             <div class="product-detail-name">${item.name}</div>
-            <div class="items-price">Rp ${item.price}</div>
+            <div class="items-price">Rp ${item.price.toLocaleString("id-ID")}</div>
           </div>
           <div class="logo-container">
             <img class="logo-items" src="${item.image_url}" alt="Item Image" />
@@ -239,7 +239,7 @@
   function addItem(item) {
     console.log("Adding item:", item); // Debugging step
     $.ajax({
-      url: "http://localhost:2526/api/mobile-legend", // Your backend API endpoint
+      url: "http://localhost:2526/api/mobile-legend/tambah", // Your backend API endpoint
       method: "POST",
       contentType: "application/json",
       data: JSON.stringify(item),
@@ -258,7 +258,7 @@
   function updateItem(item) {
     console.log("Updating item:", item); // Debugging step
     $.ajax({
-      url: `http://localhost:2526/api/mobile-legend/${item.id}`,
+      url: `http://localhost:2526/api/mobile-legend/update/${item.id}`,
       method: "PUT",
       contentType: "application/json",
       data: JSON.stringify(item),
@@ -280,7 +280,7 @@
   // Function to delete item
   function deleteItem(id) {
     $.ajax({
-      url: `http://localhost:2526/api/mobile-legend/${id}`,
+      url: `http://localhost:2526/api/mobile-legend/delete/${id}`,
       method: "DELETE",
       success: function () {
         items = items.filter((item) => item.id !== id);

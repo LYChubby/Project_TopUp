@@ -11,7 +11,7 @@ router.get("/", (req, res) => {
 });
 
 // Endpoint untuk mendapatkan data top-up berdasarkan ID
-router.get("/:id", (req, res) => {
+router.get("/data/:id", (req, res) => {
   db.query("SELECT * FROM mobile_legend WHERE id = ?", [req.params.id], (err, results) => {
     if (err) return res.status(500).send("Internal Server Error");
     if (results.length === 0) return res.status(404).send("Data tidak ditemukan");
@@ -20,7 +20,7 @@ router.get("/:id", (req, res) => {
 });
 
 // Endpoint untuk menambahkan data top-up baru
-router.post("/", (req, res) => {
+router.post("/tambah", (req, res) => {
   const { name, price, type, image_url } = req.body;
 
   if (!name || !price || !type || !image_url) {
@@ -41,7 +41,7 @@ router.post("/", (req, res) => {
 });
 
 // Endpoint untuk memperbarui data top-up
-router.put("/:id", (req, res) => {
+router.put("/update/:id", (req, res) => {
   const { name, price, type, image_url } = req.body;
 
   db.query("UPDATE mobile_legend SET name = ?, price = ?, type = ?, image_url = ? WHERE id = ?", [name, price, type, image_url, req.params.id], (err, results) => {
@@ -52,7 +52,7 @@ router.put("/:id", (req, res) => {
 });
 
 // Endpoint untuk menghapus data top-up
-router.delete("/:id", (req, res) => {
+router.delete("/delete/:id", (req, res) => {
   db.query("DELETE FROM mobile_legend WHERE id = ?", [req.params.id], (err, results) => {
     if (err) return res.status(500).send("Internal Server Error");
     if (results.affectedRows === 0) return res.status(404).send("Data tidak ditemukan");
