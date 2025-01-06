@@ -57,6 +57,24 @@ app.get("/honor-of-kings", (req, res) => {
   });
 });
 
+app.get("/efootball", (req, res) => {
+  res.render("eFootball", {
+    layout: "layouts/main-layout",
+  });
+});
+
+app.get("/pubg", (req, res) => {
+  res.render("pubg", {
+    layout: "layouts/main-layout",
+  });
+});
+
+app.get("/deltaf", (req, res) => {
+  res.render("deltaf", {
+    layout: "layouts/main-layout",
+  });
+});
+
 app.get("/CekTransaksi", (req, res) => {
   res.render("cekTransaksi", {
     layout: "layouts/main-layout",
