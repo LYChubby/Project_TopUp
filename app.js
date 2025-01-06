@@ -75,6 +75,49 @@ app.get("/deltaf", (req, res) => {
   });
 });
 
+app.get("/stumble-guys", (req, res) => {
+  res.render("stumble-guys", {
+    layout: "layouts/main-layout",
+  });
+});
+
+app.get("/marvel-duel", (req, res) => {
+  res.render("marvel-duel", {
+    layout: "layouts/main-layout",
+  });
+});
+
+app.get("/epep", (req, res) => {
+  res.render("epep", {
+    layout: "layouts/main-layout",
+  });
+});
+
+app.get("/age-empire", (req, res) => {
+  res.render("age-empire", {
+    layout: "layouts/main-layout",
+  });
+});
+
+app.get("/pb", (req, res) => {
+  res.render("pb", {
+    layout: "layouts/main-layout",
+  });
+});
+
+app.get("/magic-chess", (req, res) => {
+  res.render("magic-chess", {
+    layout: "layouts/main-layout",
+  });
+});
+
+app.get("/metal-slug", (req, res) => {
+  res.render("metal-slug", {
+    layout: "layouts/main-layout",
+  });
+});
+
+
 app.get("/CekTransaksi", (req, res) => {
   res.render("cekTransaksi", {
     layout: "layouts/main-layout",
