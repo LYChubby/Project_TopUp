@@ -190,10 +190,56 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-  let items = [];
+  $(document).ready(function () {
+    console.log("DOM telah selesai dimuat");
+    loadItems();
 
-  // Function to render items
-  function renderItems() {
+    // Submit form untuk tambah atau edit item
+    $("#itemForm").submit(function (e) {
+      e.preventDefault();
+
+      const itemId = $("#itemId").val();
+      const itemName = $("#itemName").val().trim();
+      const itemPrice = $("#itemPrice").val().trim();
+      const itemType = $("#itemType").val();
+      const itemImage = $("#itemImage").val().trim();
+
+      const data = {
+        name: itemName,
+        price: parseInt(itemPrice, 10),
+        type: itemType,
+        image_url: itemImage,
+      };
+
+      const url = itemId ? `/api/mobile-legend/update/${itemId}` : "/api/mobile-legend/tambah";
+      const method = itemId ? "PUT" : "POST";
+
+      $.ajax({
+        url: url,
+        method: method,
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function () {
+          loadItems();
+          $("#itemForm")[0].reset();
+          $("#itemModal").modal("hide");
+        },
+        error: function () {
+          alert("Gagal menyimpan data");
+        },
+      });
+    });
+  });
+
+  function loadItems() {
+    $.getJSON("/api/mobile-legend", function (items) {
+      renderItems(items);
+    }).fail(function () {
+      alert("Gagal mengambil data");
+    });
+  }
+
+  function renderItems(items) {
     const specialItemsContainer = $("#specialItemsContainer");
     const instantTopUpContainer = $("#instantTopUpContainer");
 
@@ -204,15 +250,15 @@
       const card = `
         <div class="card-container" id="item-${item.id}">
           <div class="card-item">
-            <div class="product-detail-name">${item.name}</div>
+            <div class="points">${item.name}</div>
             <div class="items-price">Rp ${item.price.toLocaleString("id-ID")}</div>
+            <div class="d-flex justify-content-around mt-2">
+              <button class="btn btn-sm btn-success" onclick="editItem(${item.id})">Edit</button>
+              <button class="btn btn-sm btn-danger" onclick="deleteItem(${item.id})">Delete</button>
+            </div>
           </div>
           <div class="logo-container">
             <img class="logo-items" src="${item.image_url}" alt="Item Image" />
-          </div>
-          <div class="d-flex justify-content-between mt-2">
-            <button class="btn btn-sm btn-success" onclick="editItem(${item.id})">Edit</button>
-            <button class="btn btn-sm btn-danger" onclick="deleteItem(${item.id})">Delete</button>
           </div>
         </div>
       `;
@@ -224,78 +270,8 @@
     });
   }
 
-  // Function to open modal for adding new item
-  function openAddModal() {
-    $("#itemId").val("");
-    $("#itemName").val("");
-    $("#itemPrice").val("");
-    $("#itemType").val("special");
-    $("#itemImage").val("");
-    $("#itemModalLabel").text("Tambah Item Baru");
-    $("#itemModal").modal("show");
-  }
-
-  // Function to add new item
-  function addItem(item) {
-    console.log("Adding item:", item); // Debugging step
-    $.ajax({
-      url: "http://localhost:2526/api/mobile-legend/tambah", // Your backend API endpoint
-      method: "POST",
-      contentType: "application/json",
-      data: JSON.stringify(item),
-      success: function (newItem) {
-        items.push(newItem);
-        renderItems();
-        console.log("Item added:", newItem); // Debugging step
-      },
-      error: function (error) {
-        console.error("Error adding item:", error);
-        alert("Gagal menambahkan item.");
-      },
-    });
-  }
-
-  function updateItem(item) {
-    console.log("Updating item:", item); // Debugging step
-    $.ajax({
-      url: `http://localhost:2526/api/mobile-legend/update/${item.id}`,
-      method: "PUT",
-      contentType: "application/json",
-      data: JSON.stringify(item),
-      success: function () {
-        const index = items.findIndex((i) => i.id === item.id);
-        if (index !== -1) {
-          items[index] = item;
-          renderItems();
-          console.log("Item updated:", item); // Debugging step
-        }
-      },
-      error: function (error) {
-        console.error("Error updating item:", error);
-        alert("Gagal memperbarui item.");
-      },
-    });
-  }
-
-  // Function to delete item
-  function deleteItem(id) {
-    $.ajax({
-      url: `http://localhost:2526/api/mobile-legend/delete/${id}`,
-      method: "DELETE",
-      success: function () {
-        items = items.filter((item) => item.id !== id);
-        renderItems();
-      },
-      error: function () {
-        alert("Gagal menghapus item.");
-      },
-    });
-  }
-
-  // Function to populate form for editing item
   function editItem(id) {
-    const item = items.find((i) => i.id === id);
-    if (item) {
+    $.getJSON(`/api/mobile-legend/data/${id}`, function (item) {
       $("#itemId").val(item.id);
       $("#itemName").val(item.name);
       $("#itemPrice").val(item.price);
@@ -303,59 +279,44 @@
       $("#itemImage").val(item.image_url);
       $("#itemModalLabel").text("Edit Item");
       $("#itemModal").modal("show");
+    }).fail(function () {
+      alert("Gagal mengambil data item");
+    });
+  }
+
+  function deleteItem(id) {
+    if (confirm("Apakah Anda yakin ingin menghapus item ini?")) {
+      $.ajax({
+        url: `/api/mobile-legend/delete/${id}`,
+        method: "DELETE",
+        success: function () {
+          loadItems();
+        },
+        error: function () {
+          alert("Gagal menghapus data");
+        },
+      });
     }
   }
 
-  // Handle form submission
-  $(document).ready(function () {
-    // Bind form submit event after DOM is ready
-    $("#itemForm").on("submit", function (e) {
-      e.preventDefault();
-      console.log("Form submitted");
+  $("#itemModal").on("shown.bs.modal", function () {
+    const form = $("#itemForm")[0];
+    console.log("Modal content:", $(this).html()); // Log isi modal
+    console.log("Form found:", form ? "Yes" : "No"); // Log elemen form
 
-      const id = Number($("#itemId").val());
-      const name = $("#itemName").val();
-      const price = Number($("#itemPrice").val());
-      const type = $("#itemType").val();
-      const image_url = $("#itemImage").val();
+    if (form) {
+      form.reset(); // Reset form saat modal ditampilkan
+    } else {
+      console.error("Form tidak ditemukan");
+    }
 
-      if (!name || !price || !type || !image_url) {
-        console.error("Data tidak lengkap!");
-        alert("Pastikan semua kolom terisi!");
-        return;
-      }
-
-      const item = { id, name, price, type, image_url };
-
-      if (id) {
-        console.log("Updating item", item);
-        updateItem(item);
-      } else {
-        console.log("Adding item", item);
-        addItem(item);
-      }
-
-      $("#itemModal").modal("hide");
-      $("#itemForm")[0].reset();
-    });
+    $("#itemId").val("");
+    $("#itemModalLabel").text("Tambah Item Baru");
   });
 
-  // Fetch items from the backend
-  function fetchItems() {
-    $.ajax({
-      url: "http://localhost:2526/api/mobile-legend", // Your backend API endpoint
-      method: "GET",
-      success: function (data) {
-        items = data;
-        renderItems();
-      },
-      error: function () {
-        alert("Gagal memuat data.");
-      },
-    });
+  function openAddModal() {
+    console.log("Opening modal...");
+    console.log("Modal element:", $("#itemModal").length > 0 ? "Found" : "Not Found");
+    $("#itemModal").modal("show");
   }
-
-  $(document).ready(function () {
-    fetchItems(); // Fetch items when page loads
-  });
 </script>
