@@ -117,7 +117,6 @@ app.get("/metal-slug", (req, res) => {
   });
 });
 
-
 app.get("/CekTransaksi", (req, res) => {
   res.render("cekTransaksi", {
     layout: "layouts/main-layout",
