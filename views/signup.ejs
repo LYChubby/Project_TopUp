@@ -37,8 +37,9 @@
           title: "Akun Berhasil Dibuat",
           icon: "success",
           draggable: true,
+        }).then(() => {
+          window.location.href = "/login";
         });
-        window.location.href = "/login";
       } else {
         Swal.fire({
           icon: "error",
