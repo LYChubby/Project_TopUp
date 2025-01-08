@@ -18,23 +18,30 @@
 
 <script>
   document.getElementById("login").addEventListener("submit", async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Mencegah form untuk melakukan submit default
 
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
+    const formData = new FormData(e.target); // Ambil data dari form
+    const data = Object.fromEntries(formData.entries()); // Konversi FormData ke objek JavaScript
 
     try {
+      // Kirim data login ke server
       const response = await fetch("/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data), // Mengirim data dalam format JSON
       });
 
-      const result = await response.json();
+      const result = await response.json(); // Ambil response dalam format JSON
 
+      // Cek apakah login berhasil
       if (response.ok && result.success) {
-        window.location.href = "/";
+        // Simpan username di localStorage setelah login berhasil
+        localStorage.setItem("username", data.username); // Menyimpan username ke localStorage
+
+        // Redirect ke halaman utama atau halaman yang sesuai setelah login
+        window.location.href = "/"; // Ganti dengan URL yang sesuai, bisa halaman dashboard
       } else {
+        // Tampilkan pesan kesalahan jika login gagal
         Swal.fire({
           icon: "error",
           title: "Oops...",
@@ -42,6 +49,7 @@
         });
       }
     } catch (error) {
+      // Tampilkan pesan kesalahan jika terjadi error saat proses login
       alert("An unexpected error occurred.");
     }
   });

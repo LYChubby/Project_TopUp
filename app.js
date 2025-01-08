@@ -30,7 +30,7 @@ app.use(
   })
 );
 
-app.use("/api/user", userAkun);
+app.use("/", userAkun);
 app.use("/api/mobile-legend", mobileLegendDb);
 
 app.get("/", (req, res) => {

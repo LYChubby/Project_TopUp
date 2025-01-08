@@ -42,7 +42,7 @@
           <div class="form-section-container-topbar">
             <p class="step-number">2</p>
             <h2 class="title-bar">Pilih Nominal TopUp</h2>
-            <button type="button" class="btn btn-primary ms-auto me-3" style="margin-left: auto" data-bs-toggle="modal" data-bs-target="#itemModal" onclick="openAddModal()">Tambah Data</button>
+            <button type="button" class="btn btn-primary ms-auto me-3 btnAdmin" style="margin-left: auto" data-bs-toggle="modal" data-bs-target="#itemModal" onclick="openAddModal()">Tambah Data</button>
           </div>
           <div class="form-section-container-main">
             <p>Special Items</p>
@@ -170,11 +170,38 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-  $(document).ready(function () {
-    console.log("DOM telah selesai dimuat");
+  // Fungsi untuk menyembunyikan tombol admin
+  const hideAdminButtons = () => {
+    const addButtons = document.querySelectorAll(".btnAdmin");
+    addButtons.forEach((button) => {
+      button.style.display = "none";
+    });
+  };
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Ambil username dari localStorage atau sessionStorage
+    const username = localStorage.getItem("username"); // Misalnya disimpan saat login
+    if (!username) {
+      console.error("No username found in localStorage. Please log in.");
+    } else {
+      console.log("Username fetched from localStorage:", username);
+    }
+
+    // Panggil fungsi loadItems untuk memuat item terlebih dahulu
     loadItems();
 
-    // Submit form untuk tambah atau edit item
+    // Cek username setelah item dimuat, dan sembunyikan tombol admin jika bukan admin
+    if (username !== "admin") {
+      console.log("Hiding admin buttons for non-admin user");
+      hideAdminButtons(); // Sembunyikan tombol admin jika bukan admin
+    } else {
+      console.log("Admin user detected, buttons should be visible");
+    }
+  });
+
+  $(document).ready(function () {
+    console.log("DOM telah selesai dimuat");
+
     $("#itemForm").submit(function (e) {
       e.preventDefault();
 
@@ -211,14 +238,25 @@
     });
   });
 
+  // Fungsi loadItems untuk mengambil data item
   function loadItems() {
     $.getJSON("/api/mobile-legend", function (items) {
       renderItems(items);
+
+      // Setelah item dimuat, periksa username dan sembunyikan tombol admin jika diperlukan
+      const username = localStorage.getItem("username");
+      if (username !== "admin") {
+        console.log("Hiding admin buttons after rendering for non-admin user");
+        hideAdminButtons();
+      } else {
+        console.log("Admin buttons should remain visible after rendering");
+      }
     }).fail(function () {
       alert("Gagal mengambil data");
     });
   }
 
+  // Fungsi untuk merender item
   function renderItems(items) {
     const specialItemsContainer = $("#specialItemsContainer");
     const instantTopUpContainer = $("#instantTopUpContainer");
@@ -233,8 +271,8 @@
             <div class="points">${item.name}</div>
             <div class="items-price">Rp ${item.price.toLocaleString("id-ID")}</div>
             <div class="d-flex justify-content-around mt-2">
-              <button class="btn btn-sm btn-success" onclick="editItem(${item.id})">Edit</button>
-              <button class="btn btn-sm btn-danger" onclick="deleteItem(${item.id})">Delete</button>
+              <button class="btn btn-sm btn-success btnAdmin" onclick="editItem(${item.id})">Edit</button>
+              <button class="btn btn-sm btn-danger btnAdmin" onclick="deleteItem(${item.id})">Delete</button>
             </div>
           </div>
           <div class="logo-container">
@@ -273,6 +311,7 @@
     });
   }
 
+  // Edit dan hapus item
   function editItem(id) {
     $.getJSON(`/api/mobile-legend/data/${id}`, function (item) {
       $("#itemId").val(item.id);
@@ -304,11 +343,11 @@
 
   $("#itemModal").on("shown.bs.modal", function () {
     const form = $("#itemForm")[0];
-    console.log("Modal content:", $(this).html()); // Log isi modal
-    console.log("Form found:", form ? "Yes" : "No"); // Log elemen form
+    console.log("Modal content:", $(this).html());
+    console.log("Form found:", form ? "Yes" : "No");
 
     if (form) {
-      form.reset(); // Reset form saat modal ditampilkan
+      form.reset();
     } else {
       console.error("Form tidak ditemukan");
     }
