@@ -3,6 +3,13 @@ const bcrypt = require("bcryptjs");
 const db = require("../database/db");
 const router = express.Router();
 
+router.get("/", (req, res) => {
+  db.query("SELECT * FROM users", (err, results) => {
+    if (err) return res.status(500).send("Internal Server Error");
+    res.json(results);
+  });
+});
+
 router.post("/signup", (req, res) => {
   const { username, password } = req.body;
 
