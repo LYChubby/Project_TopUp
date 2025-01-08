@@ -166,26 +166,6 @@
   </div>
 </main>
 
-<script>
-  function updatePayBill(amount) {
-    const formatCurrency = (number) => {
-      return "Rp " + number.toLocaleString("id-ID");
-    };
-
-    const payBills = document.querySelectorAll("#pay-bill");
-    payBills.forEach((payBill) => {
-      payBill.textContent = formatCurrency(amount);
-    });
-  }
-
-  document.querySelectorAll(".card-container .card-item").forEach((card, index) => {
-    card.addEventListener("click", () => {
-      const prices = [28510, 57020, 85529];
-      updatePayBill(prices[index]);
-    });
-  });
-</script>
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -268,6 +248,29 @@
         instantTopUpContainer.append(card);
       }
     });
+    addCardClickListeners(items);
+  }
+
+  function addCardClickListeners(items) {
+    items.forEach((item) => {
+      const cardElement = document.querySelector(`#item-${item.id} .card-item`);
+      if (cardElement) {
+        cardElement.addEventListener("click", () => {
+          updatePayBill(item.price);
+        });
+      }
+    });
+  }
+
+  function updatePayBill(amount) {
+    const formatCurrency = (number) => {
+      return "Rp " + number.toLocaleString("id-ID");
+    };
+
+    const payBills = document.querySelectorAll("#pay-bill");
+    payBills.forEach((payBill) => {
+      payBill.textContent = formatCurrency(amount);
+    });
   }
 
   function editItem(id) {
@@ -311,7 +314,6 @@
     }
 
     $("#itemId").val("");
-    $("#itemModalLabel").text("Tambah Item Baru");
   });
 
   function openAddModal() {
