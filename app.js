@@ -129,6 +129,20 @@ app.get("/leaderboard", (req, res) => {
   });
 });
 
+app.get("/login", (req, res) => {
+  res.render("login", {
+    layout: "layouts/loginpage",
+  });
+});
+
+app.get("/signup", (req, res) => {
+  res.render("signup", {
+    layout: "layouts/singuppage",
+  });
+});
+
+
+
 app.use((req, res) => {
   res.status(404).send("Page Not Found");
 });
