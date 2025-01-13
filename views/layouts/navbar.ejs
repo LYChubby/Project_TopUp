@@ -23,14 +23,46 @@
           <span class="small">Leaderboard</span>
         </a>
       </div>
-      <div class="d-flex align-items-center gap-4">
-        <a class="d-inline-flex align-items-center gap-2 text-primary text-decoration-none" href="/login">
+      <div class="d-flex align-items-center gap-4" id="auth-buttons">
+        <a class="d-inline-flex align-items-center gap-2 text-primary text-decoration-none" href="/login" id="login-link">
           <span class="small">Masuk</span>
         </a>
-        <a class="d-inline-flex align-items-center gap-2 text-primary text-decoration-none" href="/signup">
+        <a class="d-inline-flex align-items-center gap-2 text-primary text-decoration-none" href="/signup" id="signup-link">
           <span class="small">Daftar</span>
         </a>
       </div>
     </div>
   </nav>
 </header>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const username = localStorage.getItem("username");
+
+    const authButtonsContainer = document.getElementById("auth-buttons");
+    const loginLink = document.getElementById("login-link");
+    const signupLink = document.getElementById("signup-link");
+
+    if (username) {
+      // Jika pengguna sudah login
+      authButtonsContainer.innerHTML = `
+        <span class="small">Welcome, ${username}</span>
+        <a class="d-inline-flex align-items-center gap-2 text-primary text-decoration-none" href="#" id="logout-link">
+          <span class="small">Logout</span>
+        </a>
+      `;
+
+      document.getElementById("logout-link").addEventListener("click", function (e) {
+        e.preventDefault();
+        localStorage.clear(); // Menghapus semua data di localStorage
+        Swal.fire({
+          title: "Anda Berhasil Logout",
+          icon: "success",
+          draggable: true,
+        }).then(() => {
+          window.location.href = "/"; // Arahkan ke halaman utama setelah logout
+        });
+      });
+    }
+  });
+</script>
