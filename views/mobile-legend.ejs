@@ -42,7 +42,7 @@
           <div class="form-section-container-topbar">
             <p class="step-number">2</p>
             <h2 class="title-bar">Pilih Nominal TopUp</h2>
-            <button type="button" class="btn btn-primary ms-auto me-3 btnAdmin" style="margin-left: auto" data-bs-toggle="modal" data-bs-target="#itemModal" onclick="openAddModal()">Tambah Data</button>
+            <button type="button" class="btn btn-primary ms-auto me-3 btnAdmin" style="margin-left: auto" onclick="openAddModal()">Tambah Data</button>
           </div>
           <div class="form-section-container-main">
             <p>Special Items</p>
@@ -54,49 +54,6 @@
             <p>Top Up Instant</p>
             <div class="form-section-card" id="instantTopUpContainer">
               <!-- Instant Top-Up Cards will be dynamically rendered here -->
-            </div>
-          </div>
-
-          <!-- Add/Edit Modal -->
-          <div id="itemModal" class="modal fade" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="itemModalLabel">Tambah Item Baru</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <form id="itemForm">
-                    <!-- Input untuk Nama Item -->
-                    <div class="mb-3">
-                      <label for="itemName" class="form-label">Nama Item</label>
-                      <input type="text" id="itemName" name="itemName" class="form-control" required />
-                    </div>
-                    <!-- Input untuk Harga -->
-                    <div class="mb-3">
-                      <label for="itemPrice" class="form-label">Harga</label>
-                      <input type="number" id="itemPrice" name="itemPrice" class="form-control" required />
-                    </div>
-                    <!-- Input untuk Tipe Item -->
-                    <div class="mb-3">
-                      <label for="itemType" class="form-label">Tipe Item</label>
-                      <select id="itemType" name="itemType" class="form-select" required>
-                        <option value="special">Special Items</option>
-                        <option value="instant">Top-Up Instant</option>
-                      </select>
-                    </div>
-                    <!-- Input untuk URL Gambar -->
-                    <div class="mb-3">
-                      <label for="itemImage" class="form-label">URL Gambar</label>
-                      <input type="text" id="itemImage" name="itemImage" class="form-control" required />
-                    </div>
-                    <!-- Hidden Input untuk ID (Hanya digunakan saat edit) -->
-                    <input type="hidden" id="itemId" name="itemId" />
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary mt-3">Simpan</button>
-                  </form>
-                </div>
-              </div>
             </div>
           </div>
         </section>
@@ -169,6 +126,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
   // Fungsi untuk menyembunyikan tombol admin
   const hideAdminButtons = () => {
@@ -179,21 +137,18 @@
   };
 
   document.addEventListener("DOMContentLoaded", function () {
-    // Ambil username dari localStorage atau sessionStorage
-    const username = localStorage.getItem("username"); // Misalnya disimpan saat login
+    const username = localStorage.getItem("username");
     if (!username) {
       console.error("No username found in localStorage. Please log in.");
     } else {
       console.log("Username fetched from localStorage:", username);
     }
 
-    // Panggil fungsi loadItems untuk memuat item terlebih dahulu
     loadItems();
 
-    // Cek username setelah item dimuat, dan sembunyikan tombol admin jika bukan admin
     if (username !== "admin") {
       console.log("Hiding admin buttons for non-admin user");
-      hideAdminButtons(); // Sembunyikan tombol admin jika bukan admin
+      hideAdminButtons();
     } else {
       console.log("Admin user detected, buttons should be visible");
     }
@@ -201,41 +156,6 @@
 
   $(document).ready(function () {
     console.log("DOM telah selesai dimuat");
-
-    $("#itemForm").submit(function (e) {
-      e.preventDefault();
-
-      const itemId = $("#itemId").val();
-      const itemName = $("#itemName").val().trim();
-      const itemPrice = $("#itemPrice").val().trim();
-      const itemType = $("#itemType").val();
-      const itemImage = $("#itemImage").val().trim();
-
-      const data = {
-        name: itemName,
-        price: parseInt(itemPrice, 10),
-        type: itemType,
-        image_url: itemImage,
-      };
-
-      const url = itemId ? `/api/mobile-legend/update/${itemId}` : "/api/mobile-legend/tambah";
-      const method = itemId ? "PUT" : "POST";
-
-      $.ajax({
-        url: url,
-        method: method,
-        contentType: "application/json",
-        data: JSON.stringify(data),
-        success: function () {
-          loadItems();
-          $("#itemForm")[0].reset();
-          $("#itemModal").modal("hide");
-        },
-        error: function () {
-          alert("Gagal menyimpan data");
-        },
-      });
-    });
   });
 
   // Fungsi loadItems untuk mengambil data item
@@ -243,7 +163,6 @@
     $.getJSON("/api/mobile-legend", function (items) {
       renderItems(items);
 
-      // Setelah item dimuat, periksa username dan sembunyikan tombol admin jika diperlukan
       const username = localStorage.getItem("username");
       if (username !== "admin") {
         console.log("Hiding admin buttons after rendering for non-admin user");
@@ -271,7 +190,7 @@
             <div class="points">${item.name}</div>
             <div class="items-price">Rp ${item.price.toLocaleString("id-ID")}</div>
             <div class="d-flex justify-content-around mt-2">
-              <button class="btn btn-sm btn-success btnAdmin" onclick="editItem(${item.id})">Edit</button>
+              <button class="btn btn-sm btn-success btnAdmin" style="margin-right: 30px;" onclick="editItem(${item.id})">Edit</button>
               <button class="btn btn-sm btn-danger btnAdmin" onclick="deleteItem(${item.id})">Delete</button>
             </div>
           </div>
@@ -314,13 +233,60 @@
   // Edit dan hapus item
   function editItem(id) {
     $.getJSON(`/api/mobile-legend/data/${id}`, function (item) {
-      $("#itemId").val(item.id);
-      $("#itemName").val(item.name);
-      $("#itemPrice").val(item.price);
-      $("#itemType").val(item.type);
-      $("#itemImage").val(item.image_url);
-      $("#itemModalLabel").text("Edit Item");
-      $("#itemModal").modal("show");
+      Swal.fire({
+        title: "Edit Item",
+        html: `
+          <form id="itemForm">
+            <input type="hidden" id="itemId" value="${item.id}" />
+            <div class="mb-3">
+              <label for="itemName" class="form-label">Nama Item</label>
+              <input type="text" id="itemName" class="form-control" value="${item.name}" required />
+            </div>
+            <div class="mb-3">
+              <label for="itemPrice" class="form-label">Harga</label>
+              <input type="number" id="itemPrice" class="form-control" value="${item.price}" required />
+            </div>
+            <div class="mb-3">
+              <label for="itemType" class="form-label">Tipe Item</label>
+              <select id="itemType" class="form-select" required>
+                <option value="special" ${item.type === "special" ? "selected" : ""}>Special Items</option>
+                <option value="instant" ${item.type === "instant" ? "selected" : ""}>Top-Up Instant</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="itemImage" class="form-label">URL Gambar</label>
+              <input type="text" id="itemImage" class="form-control" value="${item.image_url}" required />
+            </div>
+          </form>
+        `,
+        showCancelButton: true,
+        confirmButtonText: "Simpan",
+        preConfirm: () => {
+          return {
+            id: document.getElementById("itemId").value,
+            name: document.getElementById("itemName").value,
+            price: parseInt(document.getElementById("itemPrice").value, 10),
+            type: document.getElementById("itemType").value,
+            image_url: document.getElementById("itemImage").value,
+          };
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const data = result.value;
+          $.ajax({
+            url: `/api/mobile-legend/update/${data.id}`,
+            method: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function () {
+              loadItems();
+            },
+            error: function () {
+              alert("Gagal menyimpan data");
+            },
+          });
+        }
+      });
     }).fail(function () {
       alert("Gagal mengambil data item");
     });
@@ -341,23 +307,58 @@
     }
   }
 
-  $("#itemModal").on("shown.bs.modal", function () {
-    const form = $("#itemForm")[0];
-    console.log("Modal content:", $(this).html());
-    console.log("Form found:", form ? "Yes" : "No");
-
-    if (form) {
-      form.reset();
-    } else {
-      console.error("Form tidak ditemukan");
-    }
-
-    $("#itemId").val("");
-  });
-
   function openAddModal() {
-    console.log("Opening modal...");
-    console.log("Modal element:", $("#itemModal").length > 0 ? "Found" : "Not Found");
-    $("#itemModal").modal("show");
+    Swal.fire({
+      title: "Tambah Item Baru",
+      html: `
+        <form id="itemForm">
+          <div class="mb-3">
+            <label for="itemName" class="form-label">Nama Item</label>
+            <input type="text" id="itemName" class="form-control" required />
+          </div>
+          <div class="mb-3">
+            <label for="itemPrice" class="form-label">Harga</label>
+            <input type="number" id="itemPrice" class="form-control" required />
+          </div>
+          <div class="mb-3">
+            <label for="itemType" class="form-label">Tipe Item</label>
+            <select id="itemType" class="form-select" required>
+              <option value="special">Special Items</option>
+              <option value="instant">Top-Up Instant</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="itemImage" class="form-label">URL Gambar</label>
+            <input type="text" id="itemImage" class="form-control" required />
+          </div>
+        </form>
+      `,
+      showCancelButton: true,
+      confirmButtonText: "Simpan",
+      preConfirm: () => {
+        return {
+          name: document.getElementById("itemName").value,
+          price: parseInt(document.getElementById("itemPrice").value, 10),
+          type: document.getElementById("itemType").value,
+          image_url: document.getElementById("itemImage").value,
+        };
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const data = result.value;
+        $.ajax({
+          url: "/api/mobile-legend/tambah",
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify(data),
+          success: function () {
+            loadItems();
+          },
+          error: function () {
+            alert("Gagal menyimpan data");
+          },
+        });
+      }
+    });
   }
 </script>

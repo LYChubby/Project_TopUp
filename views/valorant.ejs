@@ -35,25 +35,18 @@
           </div>
         </section>
 
-
         <section class="form-section-container">
-          <div class="form-section-container-topbar d-flex justify-content-between align-items-center">
-           <div class="title-frm d-flex">
+          <div class="form-section-container-topbar">
             <p class="step-number">2</p>
             <h2 class="title-bar">Pilih Nominal TopUp</h2>
-           </div>
-            <div class="btn-ad">
-              <button type="button" class="btn-cr btn-add" onclick="addCard()">Add</button>
-              <button type="button" class="btn-cr btn-edit" onclick="editCard()">Edit</button>
-            </div>
+            <button type="button" class="btn btn-primary ms-auto me-3 btnAdmin" style="margin-left: auto" onclick="openAddModal()">Tambah Data</button>
           </div>
           <div class="form-section-container-main">
-            <div class="form-section">
-              <div class="form-section-card" id="card-container"></div>
+            <div class="form-section-card" id="cardContainer">
+              <!-- Special Items Cards will be dynamically rendered here -->
             </div>
           </div>
         </section>
-        
 
         <section class="form-section-container">
           <div class="form-section-container-topbar">
@@ -120,7 +113,96 @@
   </div>
 </main>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+  // Fungsi untuk menyembunyikan tombol admin
+  const hideAdminButtons = () => {
+    const addButtons = document.querySelectorAll(".btnAdmin");
+    addButtons.forEach((button) => {
+      button.style.display = "none";
+    });
+  };
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const username = localStorage.getItem("username");
+    if (!username) {
+      console.error("No username found in localStorage. Please log in.");
+    } else {
+      console.log("Username fetched from localStorage:", username);
+    }
+
+    loadItems();
+
+    if (username !== "admin") {
+      console.log("Hiding admin buttons for non-admin user");
+      hideAdminButtons();
+    } else {
+      console.log("Admin user detected, buttons should be visible");
+    }
+  });
+
+  $(document).ready(function () {
+    console.log("DOM telah selesai dimuat");
+  });
+
+  // Fungsi loadItems untuk mengambil data item
+  function loadItems() {
+    $.getJSON("/api/valorant", function (items) {
+      renderItems(items);
+
+      const username = localStorage.getItem("username");
+      if (username !== "admin") {
+        console.log("Hiding admin buttons after rendering for non-admin user");
+        hideAdminButtons();
+      } else {
+        console.log("Admin buttons should remain visible after rendering");
+      }
+    }).fail(function () {
+      alert("Gagal mengambil data");
+    });
+  }
+
+  // Fungsi untuk merender item
+  function renderItems(items) {
+    const cardContainer = $("#cardContainer");
+    cardContainer.empty();
+
+    items.forEach((item) => {
+      const card = `
+        <div class="card-container" id="item-${item.id}">
+          <div class="card-item">
+            <div class="points">${item.vp}</div>
+            <div class="items-price">Rp ${item.harga.toLocaleString("id-ID")}</div>
+            <div class="d-flex justify-content-around mt-2">
+              <button class="btn btn-sm btn-success btnAdmin" style="margin-right: 30px;" onclick="editItem(${item.id})">Edit</button>
+              <button class="btn btn-sm btn-danger btnAdmin" onclick="deleteItem(${item.id})">Delete</button>
+            </div>
+          </div>
+          <div class="logo-container">
+            <img class="logo-items" src="/images/logovp.png" alt="Item Image" />
+          </div>
+        </div>
+      `;
+
+      cardContainer.append(card);
+    });
+    addCardClickListeners(items);
+  }
+
+  function addCardClickListeners(items) {
+    items.forEach((item) => {
+      const cardElement = document.querySelector(`#item-${item.id} .card-item`);
+      if (cardElement) {
+        cardElement.addEventListener("click", () => {
+          updatePayBill(item.harga);
+        });
+      }
+    });
+  }
+
   function updatePayBill(amount) {
     const formatCurrency = (number) => {
       return "Rp " + number.toLocaleString("id-ID");
@@ -132,199 +214,109 @@
     });
   }
 
-  document.querySelectorAll(".card-container .card-item").forEach((card, index) => {
-    card.addEventListener("click", () => {
-      const prices = [55597, 111194, 222385];
-      updatePayBill(prices[index]);
-    });
-  });
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-  function formatCurrency(value) {
-    return value.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
-  }
-
-  async function loadCards() {
-    try {
-      const response = await fetch('/api/valorant');
-      if (!response.ok) {
-        throw new Error(`Failed to load cards: ${response.statusText}`);
-      }
-      const data = await response.json();
-      const container = document.getElementById('card-container');
-      container.innerHTML = '';
-
-      if (data.length === 0) {
-        container.innerHTML = '<p>No cards available</p>';
-        return;
-      }
-
-      data.forEach((item) => {
-        const card = document.createElement('div');
-        card.className = 'card-container';
-        card.setAttribute('onclick', `updatePayBill(${item.harga})`);
-        card.innerHTML = `
-          <div class="card-item">
-            <div class="points">${item.vp} VP</div>
-            <div class="items-price">Rp.${formatCurrency(item.harga)}</div>
-            <button class="btn-cr btn-delete" onclick="deleteCard(${item.id}, event)">Delete</button>
-          </div>
-          <div class="logo-container">
-            <img class="logo-items" src="/images/logovp.png" alt="VP Logo" />
-          </div>
-        `;
-        container.appendChild(card);
+  // Edit dan hapus item
+  function editItem(id) {
+    $.getJSON(`/api/valorant/data/${id}`, function (item) {
+      Swal.fire({
+        title: "Edit Item",
+        html: `
+          <form id="itemForm">
+            <input type="hidden" id="itemId" value="${item.id}" />
+            <div class="mb-3">
+              <label for="itemName" class="form-label">Nama Item</label>
+              <input type="text" id="itemName" class="form-control" value="${item.vp}" required />
+            </div>
+            <div class="mb-3">
+              <label for="itemPrice" class="form-label">Harga</label>
+              <input type="number" id="itemPrice" class="form-control" value="${item.harga}" required />
+            </div>
+          </form>
+        `,
+        showCancelButton: true,
+        confirmButtonText: "Simpan",
+        preConfirm: () => {
+          return {
+            id: document.getElementById("itemId").value,
+            vp: document.getElementById("itemName").value,
+            harga: parseInt(document.getElementById("itemPrice").value, 10),
+          };
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const data = result.value;
+          $.ajax({
+            url: `/api/valorant/update/${data.id}`,
+            method: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function () {
+              loadItems();
+            },
+            error: function () {
+              alert("Gagal menyimpan data");
+            },
+          });
+        }
       });
-    } catch (error) {
-      console.error('Error loading cards:', error);
-      Swal.fire('Error', 'Failed to load cards. Please try again later.', 'error');
-    }
-  }
-
-  async function addCard() {
-    const { value: formValues } = await Swal.fire({
-      title: 'Tambah Data',
-      html: `
-        <input type="text" id="vp" class="swal2-input" placeholder="VP">
-        <input type="number" id="harga" class="swal2-input" placeholder="Harga" min="0">
-      `,
-      confirmButtonText: 'Add',
-      focusConfirm: false,
-      preConfirm: () => {
-        const vp = document.getElementById('vp').value;
-        const harga = document.getElementById('harga').value;
-        if (!vp || !harga) {
-          Swal.showValidationMessage('All fields are required');
-          return;
-        }
-        return { vp, harga: parseInt(harga) }; // Ensure harga is a number
-      },
+    }).fail(function () {
+      alert("Gagal mengambil data item");
     });
+  }
 
-    if (formValues) {
-      try {
-        const response = await fetch('/api/valorant', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formValues),
-        });
-        if (!response.ok) {
-          throw new Error('Failed to add card');
-        }
-        Swal.fire('Success', 'Card added successfully', 'success');
-        loadCards();
-      } catch (error) {
-        console.error('Error adding card:', error);
-        Swal.fire('Error', 'Failed to add card. Please try again.', 'error');
-      }
+  function deleteItem(id) {
+    if (confirm("Apakah Anda yakin ingin menghapus item ini?")) {
+      $.ajax({
+        url: `/api/valorant/delete/${id}`,
+        method: "DELETE",
+        success: function () {
+          loadItems();
+        },
+        error: function () {
+          alert("Gagal menghapus data");
+        },
+      });
     }
   }
 
-  async function deleteCard(id, event) {
-    event.stopPropagation(); // Prevent triggering the card click event
-    const confirmation = await Swal.fire({
-      title: 'Apakah anda yakin?',
-      text: 'Ini akan terhapus secara PERMANENT!',
-      icon: 'warning',
+  function openAddModal() {
+    Swal.fire({
+      title: "Tambah Item Baru",
+      html: `
+        <form id="itemForm">
+          <div class="mb-3">
+            <label for="itemName" class="form-label">Nama Item</label>
+            <input type="text" id="itemName" class="form-control" required />
+          </div>
+          <div class="mb-3">
+            <label for="itemPrice" class="form-label">Harga</label>
+            <input type="number" id="itemPrice" class="form-control" required />
+          </div>
+        </form>
+      `,
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-    });
-
-    if (confirmation.isConfirmed) {
-      try {
-        const response = await fetch(`/api/valorant/${id}`, {
-          method: 'DELETE',
-        });
-        if (!response.ok) {
-          throw new Error('Failed to delete card');
-        }
-        Swal.fire('Deleted!', 'The card has been deleted.', 'success');
-        loadCards();
-      } catch (error) {
-        console.error('Error deleting card:', error);
-        Swal.fire('Error', 'Failed to delete card. Please try again.', 'error');
-      }
-    }
-  }
-
-  async function editCard() {
-    const cards = await fetch('/api/valorant');
-    const data = await cards.json();
-
-    const { value: formValues } = await Swal.fire({
-      title: 'Edit Data',
-      html: `
-        <select id="id" class="swal2-input" onchange="updateCardDetails(this.value)">
-          <option value="">Pilih ID data</option>
-          ${data.map(item => `<option value="${item.id}">${item.id}</option>`).join('')}
-        </select>
-        <input type="text" id="vp" class="swal2-input" placeholder="VP">
-        <input type="number" id="harga" class="swal2-input" placeholder="Harga" min="0">
-      `,
-      confirmButtonText: 'Edit',
-      focusConfirm: false,
+      confirmButtonText: "Simpan",
       preConfirm: () => {
-        const id = document.getElementById('id')?.value;
-        const vp = document.getElementById('vp')?.value;
-        const harga = document.getElementById('harga')?.value;
-        if (!id || !vp || !harga) {
-          Swal.showValidationMessage('All fields are required');
-          return;
-        }
-        return { id, vp, harga: parseInt(harga) };
+        return {
+          vp: document.getElementById("itemName").value,
+          harga: parseInt(document.getElementById("itemPrice").value, 10),
+        };
       },
-    });
-
-    if (formValues) {
-      try {
-        const response = await fetch(`/api/valorant/${formValues.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ vp: formValues.vp, harga: formValues.harga }),
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const data = result.value;
+        $.ajax({
+          url: "/api/valorant/tambah",
+          method: "POST",
+          contentType: "application/json",
+          data: JSON.stringify(data),
+          success: function () {
+            loadItems();
+          },
+          error: function () {
+            alert("Gagal menyimpan data");
+          },
         });
-        console.log('Response Status:', response.status);
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error('Response Error:', errorData);
-          throw new Error('Failed to update card');
-        }
-        Swal.fire('Success', 'Card updated successfully', 'success');
-        loadCards();
-      } catch (error) {
-        console.error('Error editing card:', error);
-        Swal.fire('Error', 'Failed to update card. Please try again.', 'error');
       }
-    }
+    });
   }
-
-  // Update VP and harga when card ID is selected
-  async function updateCardDetails(id) {
-    const vpInput = document.getElementById('vp');
-    const hargaInput = document.getElementById('harga');
-
-    if (!id) {
-      vpInput.value = '';
-      hargaInput.value = '';
-      return;
-    }
-
-    try {
-      const response = await fetch(`/api/valorant/${id}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch card details');
-      }
-      const card = await response.json();
-
-      // Update the input fields with the card details
-      vpInput.value = card.vp || ''; // Set VP value or empty string if null
-      hargaInput.value = card.harga || ''; // Set Harga value or empty string if null
-    } catch (error) {
-      console.error('Error fetching card details:', error);
-    }
-  }
-
-  // Initialize
-  loadCards();
 </script>
