@@ -282,13 +282,21 @@
               loadItems();
             },
             error: function () {
-              alert("Gagal menyimpan data");
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Gagal Menyimpan Data",
+              });
             },
           });
         }
       });
     }).fail(function () {
-      alert("Gagal mengambil data item");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Gagal Mengambil Data Item",
+      });
     });
   }
 
@@ -301,7 +309,11 @@
           loadItems();
         },
         error: function () {
-          alert("Gagal menghapus data");
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Gagal Menghapus Data",
+          });
         },
       });
     }
@@ -355,7 +367,11 @@
             loadItems();
           },
           error: function () {
-            alert("Gagal menyimpan data");
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Gagal Menyimpan Data",
+            });
           },
         });
       }
