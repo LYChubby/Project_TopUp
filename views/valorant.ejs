@@ -51,6 +51,20 @@
         <section class="form-section-container">
           <div class="form-section-container-topbar">
             <p class="step-number">3</p>
+            <h2 class="title-bar">Masukkan Jumlah Pembelian</h2>
+          </div>
+          <div class="form-section-container-main">
+            <div class="quantity-container">
+              <input type="number" id="input-quantity" class="quantity-input" value="1" min="1" />
+              <button type="button" id="plus-btn" class="btn btn-secondary">+</button>
+              <button type="button" id="minus-btn" class="btn btn-secondary">-</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="form-section-container">
+          <div class="form-section-container-topbar">
+            <p class="step-number">4</p>
             <h2 class="title-bar">Metode Pembayaran</h2>
           </div>
           <div class="form-section-container-main">
@@ -98,7 +112,7 @@
         </section>
         <section class="form-section-container">
           <div class="form-section-container-topbar">
-            <p class="step-number">4</p>
+            <p class="step-number">5</p>
             <h2 class="title-bar">Kontak Anda</h2>
           </div>
           <div class="form-section-container-main">
@@ -192,27 +206,70 @@
     addCardClickListeners(items);
   }
 
+  let selectedItem = null; // Untuk menyimpan item yang dipilih
+
+  // Fungsi untuk menambahkan event listener pada kartu item
   function addCardClickListeners(items) {
     items.forEach((item) => {
       const cardElement = document.querySelector(`#item-${item.id} .card-item`);
+      const quantityInput = document.getElementById("input-quantity"); // Ambil input jumlah
+
       if (cardElement) {
         cardElement.addEventListener("click", () => {
-          updatePayBill(item.harga);
+          selectedItem = item; // Menyimpan item yang dipilih
+          updatePayBill(item.harga); // Update harga berdasarkan item yang dipilih
+
+          // Reset input jumlah ke 1 saat memilih item baru
+          quantityInput.value = 1;
         });
       }
     });
   }
 
+  // Fungsi untuk memperbarui harga pembayaran
   function updatePayBill(amount) {
     const formatCurrency = (number) => {
-      return "Rp " + number.toLocaleString("id-ID");
+      return "Rp " + number.toLocaleString("id-ID"); // Format mata uang IDR
     };
 
     const payBills = document.querySelectorAll("#pay-bill");
     payBills.forEach((payBill) => {
-      payBill.textContent = formatCurrency(amount);
+      payBill.textContent = formatCurrency(amount); // Menampilkan harga item
     });
   }
+
+  // Fungsi untuk menghitung total pembayaran berdasarkan jumlah yang dipilih
+  function updateTotal() {
+    if (!selectedItem) {
+      alert("Pilih item terlebih dahulu.");
+      return;
+    }
+
+    const quantity = parseInt(document.getElementById("input-quantity").value, 10); // Ambil jumlah dari input
+    const totalAmount = selectedItem.harga * quantity; // Hitung total berdasarkan harga dan jumlah
+    updatePayBill(totalAmount); // Perbarui total pembayaran
+  }
+
+  // Event listener untuk tombol plus dan minus
+  document.getElementById("plus-btn").addEventListener("click", () => {
+    const quantityInput = document.getElementById("input-quantity");
+    let quantity = parseInt(quantityInput.value, 10);
+    quantityInput.value = quantity + 1; // Tambah 1 ke jumlah
+    updateTotal(); // Update total harga setelah jumlah berubah
+  });
+
+  document.getElementById("minus-btn").addEventListener("click", () => {
+    const quantityInput = document.getElementById("input-quantity");
+    let quantity = parseInt(quantityInput.value, 10);
+
+    if (quantity > 1) {
+      quantityInput.value = quantity - 1; // Kurangi 1 dari jumlah (minimal 1)
+      updateTotal(); // Update total harga setelah jumlah berubah
+    }
+  });
+
+  // Event listener untuk input jumlah (untuk mengupdate harga jika jumlah diubah secara manual)
+  document.getElementById("input-quantity").addEventListener("input", updateTotal);
 
   // Edit dan hapus item
   function editItem(id) {

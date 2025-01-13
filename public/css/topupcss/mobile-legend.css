@@ -115,6 +115,34 @@
   font-size: 1rem;
 }
 
+.quantity-input {
+  width: 90%;
+  border-radius: 12px;
+  padding: 8px;
+  font-size: 1rem;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  -ms-border-radius: 12px;
+  -o-border-radius: 12px;
+  border: 2px solid #d1a875;
+}
+
+#plus-btn,
+#minus-btn {
+  background-color: #d1a875;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; /* Untuk Firefox */
+  appearance: textfield; /* Untuk browser lain */
+}
+
 .note-id {
   margin: 0;
   font-size: 0.8rem;
