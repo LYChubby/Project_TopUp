@@ -257,7 +257,11 @@
   // Fungsi untuk menghitung total pembayaran berdasarkan jumlah yang dipilih
   function updateTotal() {
     if (!selectedItem) {
-      alert("Pilih item terlebih dahulu.");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Pilih Item Terlebih Dahulu",
+      });
       return;
     }
 
