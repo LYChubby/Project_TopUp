@@ -10,6 +10,7 @@ const expressLayouts = require("express-ejs-layouts");
 const session = require("express-session");
 const userAkun = require("./routes/userAkun");
 const mobileLegendDb = require("./routes/mobileLegenddb");
+const valorantDb = require("./routes/valorantdb");
 
 app.use(expressLayouts);
 app.use(express.json());
@@ -32,6 +33,7 @@ app.use(
 
 app.use("/", userAkun);
 app.use("/api/mobile-legend", mobileLegendDb);
+app.use("/api/valorant", valorantDb);
 
 app.get("/", (req, res) => {
   res.render("index", {
@@ -50,6 +52,7 @@ app.get("/valorant", (req, res) => {
     layout: "layouts/main-layout",
   });
 });
+
 
 app.get("/honor-of-kings", (req, res) => {
   res.render("honor-king", {

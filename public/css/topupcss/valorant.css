@@ -146,3 +146,15 @@
   height: auto;
   object-fit: contain;
 }
+
+.btn-cr {
+  width: 100px;
+  color: aliceblue;
+  background-color: #5a5563;
+  border: none; 
+  border-radius: 8px;
+}
+.btn-cr:hover{
+  color: hsl(183, 47%, 85%);
+  background-color: #4e4b54;
+} 
