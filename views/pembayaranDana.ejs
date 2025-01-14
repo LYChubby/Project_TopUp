@@ -1,0 +1,58 @@
+<section class="status">
+  <div class="container">
+    <h2>STATUS PEMBAYARAN</h2>
+  </div>
+</section>
+
+<div class="container-pembayaran">
+  <div class="rincian-harga">
+    <div class="account-info">
+      <img src="images/logo-mobile-legends.jpg" alt="Mobile Legends" />
+      <div>
+        <p>Nickname: <span id="nickname">JammFreecss</span></p>
+        <p>ID: <span id="id">257021394</span></p>
+        <p>Server: <span id="server">9353</span></p>
+      </div>
+    </div>
+    <div class="payment-details">
+      <h2>Rincian Pembayaran</h2>
+      <p>Harga: <span id="price">Rp 1.539</span></p>
+      <p>Jumlah: <span id="quantity">1x</span></p>
+      <p>Subtotal: <span id="subtotal">Rp 1.539</span></p>
+      <p>Biaya: <span id="fee">Rp 47</span></p>
+      <h3>Total Pembayaran: <span id="total">Rp 1.586</span></h3>
+    </div>
+  </div>
+
+  <div class="payment-method">
+    <h2>Metode Pembayaran</h2>
+    <p>DANA</p>
+    <p>Nomor Invoice: <span id="invoice-number">OS04BF64C8C691C8C86083762</span></p>
+    <p>Status Pembayaran: <span id="payment-status">UNPAID</span></p>
+    <p>Status Transaksi: <span id="transaction-status">PENDING</span></p>
+    <p>Pesan: <span id="message">Menunggu pembayaran</span></p>
+    <img src="/images/bagibagi.png" alt="QR Code" /> <br />
+    <button>Unduh Kode QR</button>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    fetch("/get-payment-details")
+      .then((response) => response.json())
+      .then((data) => {
+        document.getElementById("nickname").textContent = data.nickname;
+        document.getElementById("id").textContent = data.id;
+        document.getElementById("server").textContent = data.server;
+        document.getElementById("price").textContent = `Rp ${data.price}`;
+        document.getElementById("quantity").textContent = `${data.quantity}x`;
+        document.getElementById("subtotal").textContent = `Rp ${data.subtotal}`;
+        document.getElementById("fee").textContent = `Rp ${data.fee}`;
+        document.getElementById("total").textContent = `Rp ${data.total}`;
+        document.getElementById("invoice-number").textContent = data.invoiceNumber;
+        document.getElementById("payment-status").textContent = data.paymentStatus;
+        document.getElementById("transaction-status").textContent = data.transactionStatus;
+        document.getElementById("message").textContent = data.message;
+      });
+  });
+</script>

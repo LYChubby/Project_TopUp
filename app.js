@@ -53,7 +53,6 @@ app.get("/valorant", (req, res) => {
   });
 });
 
-
 app.get("/honor-of-kings", (req, res) => {
   res.render("honor-king", {
     layout: "layouts/main-layout",
@@ -120,6 +119,12 @@ app.get("/metal-slug", (req, res) => {
   });
 });
 
+app.get("/Invoice-Dana", (req, res) => {
+  res.render("pembayaranDana", {
+    layout: "layouts/main-layout",
+  });
+});
+
 app.get("/CekTransaksi", (req, res) => {
   res.render("cekTransaksi", {
     layout: "layouts/main-layout",
@@ -143,8 +148,6 @@ app.get("/signup", (req, res) => {
     layout: "layouts/singuppage",
   });
 });
-
-
 
 app.use((req, res) => {
   res.status(404).send("Page Not Found");
