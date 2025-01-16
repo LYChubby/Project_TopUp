@@ -69,7 +69,3 @@
   width: 200px;
   cursor: pointer;
 }
-
-button:hover {
-  background-color: #777;
-}
