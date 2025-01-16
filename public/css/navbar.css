@@ -23,3 +23,12 @@ body {
 .bahasa:hover {
   background-color: #c29564;
 }
+
+.nav-cs{
+  position: sticky; 
+  background-color: rgba(51, 51, 51, 0.597);
+  z-index: 1000; 
+  top: 0;
+  border-color: black;
+  backdrop-filter: blur(10px);
+}
